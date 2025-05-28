@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climahole</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #eceaea;
+        }
+        #login-container {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .password-container {
+            position: relative;
+            max-width: 300px;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+        #password {
+            width: 100%;
+            padding-right: 40px; 
+            box-sizing: border-box;
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+        #content-container {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .title {
+           text-align: center;
+        }
+        .part-item {
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .part-item:hover {
+            background-color: #83cefa;
+        }
+        /* Стилі для модального вікна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: auto;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        #image-viewer {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+        /* Адаптивність */
+        @media (max-width: 600px) {
+            #content-container {
+                padding: 10px;
+            }
+            .part-item {
+                padding: 8px;
+                margin: 5px 0;
+            }
+            .modal-content {
+                padding: 10px;
+                max-width: 95%;
+                max-height: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container">
+    <h2>Вхід</h2>
+    <div class="password-container">
+        <input type="password" id="password" placeholder="Введіть пароль">
+        <span id="toggle-password" class="eye-icon">👁️</span>
+    </div>
+    <button onclick="checkPassword()">Увійти</button>
+</div>
+    <div id="content-container">
+        <h1 class="title">Список Інструкцій</h1>
+        <div id="parts-list">
+            <!-- Список деталей буде додано через JavaScript -->
+        </div>
+    </div>
+
+    <!-- Модальне вікно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <img id="image-viewer" src="" alt="Зображення деталі">
+        </div>
+    </div>
+
+    <script>
+        // Простий пароль для доступу
+        const correctPassword = "маргарина".toLowerCase();
+       
+
+
+        // Список деталей із посиланнями на зображення
+        const parts = [
+            { name: "Коліно квадратне", file: "Instruction/1.jpg", type: "image" },
+            { name: "Деталь 2", file: "Instruction/detail2.jpg", type: "image" },
+            { name: "Деталь 3", file: "Instruction/detail3.jpg", type: "image" },
+            { name: "Калькулятор прямокутного переходу", file: "https://relden.github.io/Square-transition/", type: "link" }
+        ];
+
+        function checkPassword() {
+            const passwordInput = document.getElementById("password").value.toLowerCase();
+            if (passwordInput === correctPassword) {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("content-container").style.display = "block";
+                loadPartsList();
+            } else {
+                alert("Неправильний пароль!");
+            }
+        }
+
+        document.getElementById("toggle-password").addEventListener("click", function() {
+            const passwordInput = document.getElementById("password");
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            this.textContent = type === "password" ? "👁️" : "🙈"; // Змінюємо іконку
+        });
+
+        function loadPartsList() {
+            const partsList = document.getElementById("parts-list");
+            parts.forEach(part => {
+                const partDiv = document.createElement("div");
+                partDiv.className = "part-item";
+                partDiv.textContent = part.name;
+                partDiv.onclick = () => displayFile(part.file, part.type);
+                partsList.appendChild(partDiv);
+            });
+        }
+
+        function displayFile(file, type) {
+            if (type === "image") {
+                const modal = document.getElementById("modal");
+                const imageViewer = document.getElementById("image-viewer");
+
+                modal.style.display = "flex";
+                imageViewer.src = file;
+            } else if (type === "link") {
+                window.open(file, "_blank"); // Відкриваємо посилання в новій вкладці
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("modal");
+            modal.style.display = "none";
+            document.getElementById("image-viewer").src = "";
+        }
+    </script>
+</body>
+</html>
