@@ -36,6 +36,42 @@
             font-size: 18px;
             user-select: none;
         }
+
+        @media (max-width: 480px) {
+            #login-container {
+                margin-top: 20px;
+                padding: 10px;
+            }
+
+            .password-container {
+                max-width: 100%;
+                padding: 0 10px;
+            }
+
+            #password {
+                padding-right: 30px;
+                font-size: 14px;
+            }
+
+            .eye-icon {
+                font-size: 16px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            #password {
+                font-size: 12px;
+                padding-right: 25px;
+            }
+
+            .eye-icon {
+                font-size: 14px;
+                right: 10px;
+            }
+        }
+
+        
         #content-container {
             display: none;
             max-width: 800px;
