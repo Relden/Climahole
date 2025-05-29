@@ -2,6 +2,9 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Climahole</title>
     <style>
@@ -232,6 +235,25 @@
             modal.style.display = "none";
             document.getElementById("image-viewer").src = "";
         }
+        
+        let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Показати кнопку встановлення
+            const installButton = document.createElement('button');
+                installButton.textContent = 'Встановити додаток';
+                document.body.appendChild(installButton);
+                installButton.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Користувач встановив PWA');
+        }
+        deferredPrompt = null;
+      });
+    });
+  });
     </script>
 </body>
 </html>
